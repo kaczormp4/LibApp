@@ -8727,19 +8727,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Marcin\\.nuget\\packages\\": {}
+    "C:\\Users\\KMWG\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Marcin\\Desktop\\GIT\\LibApp_Gr5\\LibApp\\LibApp.csproj",
+      "projectUniqueName": "D:\\STUDIA\\c# project ASP NET\\LibApp\\LibApp.csproj",
       "projectName": "LibApp",
-      "projectPath": "C:\\Users\\Marcin\\Desktop\\GIT\\LibApp_Gr5\\LibApp\\LibApp.csproj",
-      "packagesPath": "C:\\Users\\Marcin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Marcin\\Desktop\\GIT\\LibApp_Gr5\\LibApp\\obj\\",
+      "projectPath": "D:\\STUDIA\\c# project ASP NET\\LibApp\\LibApp.csproj",
+      "packagesPath": "C:\\Users\\KMWG\\.nuget\\packages\\",
+      "outputPath": "D:\\STUDIA\\c# project ASP NET\\LibApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Marcin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\KMWG\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8828,12 +8828,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[5.0.13, 5.0.13]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -8842,7 +8836,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   },
