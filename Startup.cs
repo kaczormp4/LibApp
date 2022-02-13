@@ -38,8 +38,17 @@ namespace LibApp
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddScoped<InterfaceBookReopository, BookRepository>();
+            services.AddScoped<InterfaceBookRepository, BookRepository>();
+            AddRepositories(services);
             services.AddControllersWithViews();
+        }
+
+        private void AddRepositories(IServiceCollection services)
+        {
+            services.AddScoped<InterfaceBookRepository, BookRepository>();
+            services.AddScoped<InterfaceCustomerRepository, CustomerRepository>();
+            services.AddScoped<InterfaceGenreRepository, GenreRepository>();
+            services.AddScoped<InterfaceMembershipTypeRepository, MembershipTypeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,7 +9,7 @@ using LibApp.Models;
 
 namespace LibApp.Repositories
 {
-    public class BookRepository: InterfaceBookReopository
+    public class BookRepository: InterfaceBookRepository
     {
         private readonly ApplicationDbContext _context;
         public BookRepository(ApplicationDbContext context)
