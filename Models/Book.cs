@@ -9,10 +9,10 @@ namespace LibApp.Models
     public class Book
     {
         public int Id { get; set; }
-		[Required]
+		[Required(ErrorMessage = "Please provide correct book name")]
 		[StringLength(255)]
 		public string Name { get; set; }
-		[Required]
+		[Required(ErrorMessage = "Please provide correct author name")]
 		public string AuthorName { get; set; }
 		[Required(ErrorMessage = "Genre must be specified")]
 		public Genre Genre { get; set; }
@@ -25,7 +25,6 @@ namespace LibApp.Models
 		[Display(Name="Number in Stock")]
 		[Range(1,20,ErrorMessage = "Number In Stock must be between 1 - 20")]
 		public int NumberInStock { get; set; }
-		[Required(ErrorMessage = "Number Available is requaired")]
 		public int NumberAvailable { get; set; }
 	}
 
