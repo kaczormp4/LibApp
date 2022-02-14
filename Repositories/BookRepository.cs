@@ -20,8 +20,12 @@ namespace LibApp.Repositories
         {
             return _context.Books;
         }
-        public Book GetBookById(int id) => _context.Books.Find(id);
-
+        public Book GetBookById(int id)
+        {
+            var book = _context.Books.Find(id);
+            book.Genre = _context.Genre.Find(book.GenreId);
+            return book;
+        }
         public void AddBook(Book book) => _context.Books.Add(book);
 
         public void DeleteBook(int bookId) => _context.Books.Remove(GetBookById(bookId));
