@@ -1,8 +1,10 @@
 ﻿@model LibApp.Models.Book
-@{ 
+@{
     ViewBag.Title = Model.Name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
 
 <h2>@Model.Name</h2>
 <ul>
@@ -12,3 +14,8 @@
     <li>Date Added: @Model.DateAdded.ToShortDateString()</li>
     <li>Number in Stock: @Model.NumberInStock</li>
 </ul>
+@if (User.IsInRole("Administrator"))
+
+{
+    <a class='btn btn-primary' href="../../books/edit/@(Model.Id)">Edit</a>
+}

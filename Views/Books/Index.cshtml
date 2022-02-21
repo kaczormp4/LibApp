@@ -1,31 +1,97 @@
+
 @model IEnumerable<LibApp.Models.Book>
+@using Microsoft.AspNetCore.Identity
 
 @{
     ViewBag.Title = "Books";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@inject UserManager<IdentityUser> UserManager
 <h2>Books</h2>
 
 <p>
-    <a class="btn btn-primary" asp-action="New">New Book</a>
+    @if (User.IsInRole("UserManager") || User.IsInRole("Owner"))
+    {
+        <a class="btn btn-primary" asp-action="New">New Book</a>}
 </p>
 
-<table class="table table-bordered table-hover">
+<table id="books" class="table table-hover">
     <thead>
-    <tr>
-        <th>Book</th>
-        <th colspan="2">Genre</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var book in Model)
-    {
         <tr>
-            <td><a asp-action="Edit" asp-route-id="@book.Id">@Html.DisplayFor(modelItem => book.Name)</a></td>
-            <td>@Html.DisplayFor(modelItem => book.Genre.Name)</td>
-            <td><a asp-action="Details" asp-route-id="@book.Id">Details</a></td>
+            <th>Book</th>
+            <th>Genre</th>
+            <th>Actions</th>
         </tr>
-    }
-    </tbody>
+    </thead>
 </table>
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#books").DataTable({
+                ajax: {
+                    url: "api/books",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name",
+                        render: function (data, type, book) {
+                            return "<a href='books/details/" + book.id + "'>" + book.name + "</a>";
+                        }
+                    },
+                    {
+                        data: "genre",
+                        render: function (data, type, book) {
+                            return book.genre.name;
+                        }
+                    },
+                    {
+                        data: "id",
+                        render: function (data) {
+                            @if (User.IsInRole("UserManager") || User.IsInRole("Owner"))
+                            {
+                                <text>
+                                    return "<button class='btn btn-secondary js-delete' data-book-id=" + data + ">Delete</button>";
+                                </text>
+                            }
+                            return '';
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var table = $("#books").DataTable();
+            $("#books").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm({
+                    message: "Confirm book deletion?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/api/books/" + button.attr("data-book-id"),
+                                method: "DELETE",
+                                success: function () {
+                                    table.row(button.parents("tr")).remove().draw();
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

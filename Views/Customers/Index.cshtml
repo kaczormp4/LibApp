@@ -1,30 +1,31 @@
-@{
-    ViewBag.Title = "Customers";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@using Microsoft.AspNetCore.Identity
+@{ ViewBag.Title = "Customers";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+@inject UserManager<IdentityUser> UserManager
 
 <h2>Customers</h2>
 
 <p>
-    <a class="btn btn-primary" asp-action="New">New Customer</a>
+    @if (User.IsInRole("Owner"))
+    {
+<a class="btn btn-primary" asp-action="New">New Customer</a>}
 </p>
-
 
 <table id="customers" class="table table-hover">
     <thead>
-    <tr>
-        <th >Customer</th>
-        <th>Membership Type</th>
-        <th>Delete</th>
+        <tr>
+            <th>Customer</th>
+            <th>Membership Type</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-       
     </tbody>
 </table>
 
 
-@section Scripts 
+@section Scripts
 {
     <script>
         $(document).ready(function () {
@@ -37,7 +38,7 @@
                     {
                         data: "name",
                         render: function (data, type, customer) {
-                            return "<a href='customers/details/" + customer + "'>" + customer.name + "</a>";
+                            return "<a href='customers/details/" + customer.id + "'>" + customer.name + "</a>";
                         }
                     },
                     {
@@ -46,7 +47,13 @@
                     {
                         data: "id",
                         render: function (data) {
-                            return "<button class='btn btn-secondary js-delete' data-customer-id=" + data + ">Delete</button>";
+                            @if (User.IsInRole("Owner"))
+                            {
+                                <text>
+                                    return "<button class='btn btn-secondary js-delete' data-customer-id=" + data + ">Delete</button>";
+                                </text>
+                            }
+                            return '';
                         }
                     }
                 ]
@@ -58,9 +65,7 @@
         $(document).ready(function () {
             var table = $("#customers").DataTable();
             $("#customers").on("click", ".js-delete", function () {
-                 
                 var button = $(this);
-                console.log("ID: " + button.attr("data-customer-id"));
                 bootbox.confirm({
                     message: "Confirm customer deletion?",
                     buttons: {
