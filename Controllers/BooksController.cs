@@ -8,6 +8,8 @@ using LibApp.ViewModels;
 using LibApp.Data;
 using Microsoft.EntityFrameworkCore;
 using LibApp.Interfaces;
+using System.Web.Http;
+using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
 
 namespace LibApp.Controllers
 {
@@ -24,23 +26,28 @@ namespace LibApp.Controllers
 
         public IActionResult Index()
         {
-            var books = _bookRepository.GetBooks()
-                .ToList();
+            var books = _bookRepository.GetBooks();
+                //.ToList();
 
             return View(books);
         }
 
         public IActionResult Details(int id)
         {
-            var book = _bookRepository.GetBooks()
-                .SingleOrDefault(b => b.Id == id);
+            var book = _bookRepository.SingleOrDefault(id);
+
+            if (book == null)
+            {
+                return Content("Book not found");
+            }
 
             return View(book);
         }
-        
+
+        [Authorize(Roles = "StoreManager,Owner")]
         public IActionResult Edit(int id)
         {
-            var book = _bookRepository.GetBookById(id); 
+            var book = _bookRepository.SingleOrDefault(id); 
             if (book == null) 
             {
                 return NotFound();
@@ -54,7 +61,7 @@ namespace LibApp.Controllers
 
             return View("BookForm", viewModel);
         }
-
+        [Authorize(Roles = "StoreManager,Owner")]
         public IActionResult New()
         {
             var viewModel = new BookFormViewModel
@@ -66,6 +73,8 @@ namespace LibApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "StoreManager,Owner")]
         public IActionResult Save(Book book)
         {
             if (book.Id == 0)
@@ -75,7 +84,7 @@ namespace LibApp.Controllers
             }
             else
             {
-                var bookInDb = _bookRepository.GetBookById(book.Id);
+                var bookInDb = _bookRepository.SingleOrDefault(book.Id);
                 bookInDb.Name = book.Name;
                 bookInDb.AuthorName = book.AuthorName;
                 bookInDb.GenreId = book.GenreId;
@@ -86,7 +95,7 @@ namespace LibApp.Controllers
 
             try
             {
-                _bookRepository.Save();
+                _bookRepository.SaveChanges();
             }
             catch (DbUpdateException e)
             {
@@ -94,6 +103,15 @@ namespace LibApp.Controllers
             }
 
             return RedirectToAction("Index", "Books");
+        }
+        protected IActionResult FormViewFor(Book book)
+        {
+            var viewModel = new BookFormViewModel
+            {
+                Genres = _genreRepository.GetGenres().ToList()
+            };
+
+            return View("BookForm", viewModel);
         }
     }
 }

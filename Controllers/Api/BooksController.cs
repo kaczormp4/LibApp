@@ -70,6 +70,7 @@ namespace LibApp.Controllers.Api
 
         // POST /api/books
         [HttpPost]
+        [Authorize(Roles = "StoreManager,Owner")]
         public IActionResult Add(Book bookDto)
         {
             if (!ModelState.IsValid)
@@ -78,7 +79,7 @@ namespace LibApp.Controllers.Api
             }
             var book = _mapper.Map<Book>(bookDto);
             _bookRepository.AddBook(book);
-            _bookRepository.Save();
+            _bookRepository.SaveChanges();
             bookDto.Id = book.Id;
 
             return CreatedAtRoute(nameof(Get), new { id = bookDto.Id }, bookDto);
@@ -86,6 +87,7 @@ namespace LibApp.Controllers.Api
 
         // PUT /api/books
         [HttpPut("{id}")]
+        [Authorize(Roles = "StoreManager,Owner")]
         public void Update(int id, BookDto bookDto)
         {
             if (!ModelState.IsValid)
@@ -99,17 +101,18 @@ namespace LibApp.Controllers.Api
             }
             _mapper.Map(bookDto, bookInDb);
 
-            _bookRepository.Save();
+            _bookRepository.SaveChanges();
         }
         // DELETE /api/books{id}
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "StoreManager,Owner")]
         public IActionResult Delete(int id)
         {
             if (_bookRepository.GetBookById(id) != null)
             {
-                _bookRepository.DeleteBook(id);
-                _bookRepository.Save();
+                _bookRepository.DeleteBookById(id);
+                _bookRepository.SaveChanges();
                 return Ok();
             }
             else return NotFound();

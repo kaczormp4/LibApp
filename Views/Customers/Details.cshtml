@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Identity
 @model LibApp.Models.Customer
 
 @{
@@ -17,7 +18,7 @@
         <li>@("Subscribed to newsletter: " + (Model.HasNewsletterSubscribed ? "Yes" : "No"))</li>
     }
 </ul>
-@if (User.IsInRole("Administrator"))
-
+@if (User.IsInRole("StoreManager") || User.IsInRole("Owner"))
 {
-    <a class='btn btn-primary' href="../../customers/edit/@(Model.Id)">Edit</a>}
+    <a href="/customers/edit/@Model.Id" class="btn btn-primary">Edit</a>
+}

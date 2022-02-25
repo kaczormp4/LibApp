@@ -55,7 +55,7 @@ namespace LibApp.Controllers.Api
 
             if (customer == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
             }
 
             Console.WriteLine("Request END");
@@ -68,7 +68,7 @@ namespace LibApp.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest);
             }
 
             var customer = _mapper.Map<Customer>(customerDto);
@@ -81,17 +81,18 @@ namespace LibApp.Controllers.Api
 
         // PUT /api/customers/{id}
         [HttpPut("{id}")]
+        [Authorize(Roles = "Owner")]
         public void UpdateCustomer(int id, CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest);
             }
 
-            var customerInDb = _context.Customers.Single(c => c.Id == customerDto.Id);
+            var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == customerDto.Id);
             if (customerInDb == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
             }
 
             _mapper.Map(customerDto, customerInDb);
@@ -102,10 +103,10 @@ namespace LibApp.Controllers.Api
         [HttpDelete("{id}")]
         public void DeleteCustomer(int id)
         {
-            var customerInDb = _context.Customers.Single(c => c.Id == id);
+            var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);
             if (customerInDb == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
             }
 
             _context.Customers.Remove(customerInDb);
